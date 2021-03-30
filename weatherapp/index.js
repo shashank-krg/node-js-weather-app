@@ -4,11 +4,14 @@ var requests = require("requests");
 const hostname = '127.0.0.1';
 const port = 3000;
 
+//reading html file
 const homeFile = fs.readFileSync("home.html","utf-8");
 
+//replacing dummy data with the fetched data
 const replaceVal = (tempVal ,orgVal)=>{
     let temperature = tempVal.replace("{%tempval%}",orgVal.main.temp);
      temperature = temperature.replace("{%tempmin%}",orgVal.main.temp_min);
+     temperature = temperature.replace("{%humidity%}",orgVal.main.humidity);
      temperature = temperature.replace("{%tempmax%}",orgVal.main.temp_max);
      temperature = temperature.replace("{%location%}",orgVal.name);
      temperature = temperature.replace("{%country%}",orgVal.sys.country);
@@ -22,6 +25,7 @@ const server = http.createServer((req,res) =>{
         requests(
             "http://api.openweathermap.org/data/2.5/weather?q=Bhubaneshwar&units=metric&appid=a0662c9920cb0955cf44b4ed0bda5fbe")
         .on("data",(chunk) =>{
+            //converting json data to object data
             const objdata = JSON.parse(chunk);
             const arrData = [objdata];
 
